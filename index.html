@@ -3,43 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Basic HTML Game</title>
+    <title>Game with Player Character</title>
     <style>
-        body {
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
-        }
         canvas {
-            border: 1px solid #000;
+            border: 1px solid black;
+            background-color: #f0f0f0;
         }
     </style>
 </head>
 <body>
-    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
-        let gameRunning = true;
+        let player = { x: 10, y: 10, size: 20 };
 
-        function gameLoop() {
-            if (!gameRunning) return;
-
-            // Clear the canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Game logic goes here
-
-            // Request the next frame
-            requestAnimationFrame(gameLoop);
+        function drawPlayer() {
+            ctx.fillStyle = 'blue';
+            ctx.fillRect(player.x, player.y, player.size, player.size);
         }
 
-        // Start the game loop
-        gameLoop();
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function updateGameArea() {
+            clearCanvas();
+            drawPlayer();
+        }
+
+        window.addEventListener('keydown', function(event) {
+            switch (event.key) {
+                case 'ArrowUp':
+                    player.y -= 5;
+                    break;
+                case 'ArrowDown':
+                    player.y += 5;
+                    break;
+                case 'ArrowLeft':
+                    player.x -= 5;
+                    break;
+                case 'ArrowRight':
+                    player.x += 5;
+                    break;
+            }
+            updateGameArea();
+        });
+
+        // Initial draw
+        updateGameArea();
     </script>
 </body>
 </html>
