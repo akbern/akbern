@@ -3,43 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Continuous Game Loop</title>
-</head>
-<body>
-    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <title>Game</title>
     <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
+        // Set gravity variable
+        const gravity = 0.5;
 
-        let x = canvas.width / 2;
-        let y = canvas.height / 2;
-        let speed = 5;
+        // Function for updating enemy positions
+        function updateEnemyPositions(enemies) {
+            enemies.forEach(enemy => {
+                enemy.velocityY += gravity; // Apply gravity
+                enemy.y += enemy.velocityY; // Update enemy position
 
-        function gameLoop() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = 'blue';
-            ctx.fillRect(x, y, 50, 50);
-            requestAnimationFrame(gameLoop);
+                // Check for collision with the ground
+                if (enemy.y > groundY) { // Assuming groundY is the y-coordinate of the ground
+                    enemy.y = groundY; // Set enemy on ground
+                    enemy.velocityY = 0; // Reset velocity
+                }
+            });
         }
 
-        window.addEventListener('keydown', function(event) {
-            switch(event.key) {
-                case 'ArrowUp':
-                    y -= speed;
-                    break;
-                case 'ArrowDown':
-                    y += speed;
-                    break;
-                case 'ArrowLeft':
-                    x -= speed;
-                    break;
-                case 'ArrowRight':
-                    x += speed;
-                    break;
+        // Function for detecting collisions between enemies and platforms
+        function checkCollision(enemy, platform) {
+            // Collision logic
+            if (enemy.x < platform.x + platform.width &&
+                enemy.x + enemy.width > platform.x &&
+                enemy.y < platform.y + platform.height &&
+                enemy.y + enemy.height > platform.y) {
+                // Collision detected
+                enemy.velocityY = 0; // Stop falling
             }
-        });
-
-        gameLoop();
+        }
     </script>
+</head>
+<body>
+    <h1>Welcome to the Game!</h1>
+    <div id="gameArea"></div>
 </body>
 </html>
